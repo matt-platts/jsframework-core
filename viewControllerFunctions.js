@@ -115,8 +115,6 @@ page.prototype.makePageCallsInner = function(){
 		    layoutSectionsLoop:
 		    for(layoutSections in pageRegister[currentPageIdentifier]["blocks"]) {
 
-			//alert("test:"+layoutSections);
-
 			var blocksInSection = new Array();
 			if(pageRegister[previousPageIdentifier]["blocks"].hasOwnProperty(layoutSections)){
 			    var blockOrderDiffs = false;
@@ -160,12 +158,10 @@ page.prototype.makePageCallsInner = function(){
 			}
 
 			//call update functions for blocks in the section
-			//layoutRender(pageRegister[pageIdentifier].layout);
 			if(pageRegister[previousPageIdentifier].layout != pageRegister[currentPageIdentifier].layout && !blockOrderDiffs) {
-			    //$(clones[layoutSections]).insertAfter("#"+layoutSections);
 			    $("#"+layoutSections).replaceWith(clones[layoutSections]);
 			    $.each(blocksInSection, function(index, value) {
-				if(blockRegister[value].hasOwnProperty("javascriptURL")) { //byFulvio
+				if(blockRegister[value].hasOwnProperty("javascriptURL")) {
 				    if( typeof blockRegister[value].javascriptURL == "object"){
 
 					for(var i=0; i< blockRegister[value].javascriptURL.length; i++){
@@ -182,7 +178,7 @@ page.prototype.makePageCallsInner = function(){
 
 			if(pageRegister[previousPageIdentifier].layout == pageRegister[currentPageIdentifier].layout && !blockOrderDiffs) {
 			    $.each(blocksInSection, function(index, value) {
-				if(blockRegister[value].hasOwnProperty("javascriptURL")) { //byFulvio
+				if(blockRegister[value].hasOwnProperty("javascriptURL")) {
 				    if( typeof blockRegister[value].javascriptURL == "object"){
 
 					for(var i=0; i< blockRegister[value].javascriptURL.length; i++){
@@ -203,16 +199,16 @@ page.prototype.makePageCallsInner = function(){
 		logMessage("PPI AND CPI are the same");
 		layoutRender(pageRegister[pageIdentifier].layout);
 	    }
+
 	    //remove stylesheets for previous pages
 	    for (var i = 0; i < 5; i++) {
-		//had to do it this way, as the removal based on class did not work - $(".additionalStylesheet").remove();
+		// annoying hack, but had to do it this way, as the removal based on class did not work in some browsers: $(".additionalStylesheet").remove();
 		$("#additionalStylesheet"+[i]).remove();
 	    }
 
 	    //add stylesheets for current page
 	    var default_styles_removed="";
 	    if(pageRegister[pageIdentifier].hasOwnProperty("replacementStyleSheets")){
-		//alert("Got replacement stylesheets");
 
 		var arrayWStyleSheets=pageRegister[pageIdentifier]["replacementStyleSheets"];
 		arrayWStyleSheets=arrayWStyleSheets.split( "," );
@@ -223,7 +219,6 @@ page.prototype.makePageCallsInner = function(){
 		      element = arrayWStyleSheets[i];
 			var linkTag = document.createElement ("link");
 			linkTag.href = arrayWStyleSheets[i] + "?v=" + appVersion;
-			//alert("in link: "+length+" id:"+pageIdentifier+" "+linkTag.href);
 			linkTag.rel = "stylesheet";
 			linkTag.id = "replacementStylesheet"+[i];
 			linkTag.className = "replacementStylesheet";
@@ -237,9 +232,7 @@ page.prototype.makePageCallsInner = function(){
 		  }
 		   if (!document.getElementById("replacementStylesheet0")){
 		       head.appendChild (linkTag);
-		   }
-		    //alert("ADDING " + linkTag.href + " index is " + linkTag.href.indexOf("signup.css"));
-		    /* matt-signup */
+		   
 		    if (
 				(linkTag.href.indexOf("signup.css")>-1 && document.getElementById("main_screen_stylesheet"))
 				||
@@ -254,7 +247,6 @@ page.prototype.makePageCallsInner = function(){
 			if (print_stylesheet){
 			    head.removeChild(print_stylesheet);
 			}
-			    //alert("removing style.css and setting defaul_styles_removed to 1");
 			default_styles_removed=1;
 		    }
 		    if (linkTag.href.indexOf("signup.css")>-1){
@@ -274,14 +266,10 @@ page.prototype.makePageCallsInner = function(){
 
 
 	    if(pageRegister[pageIdentifier].hasOwnProperty("additionalStyleSheets")){
-		//alert("Got additional, not replacement stylesheets");
-
 
 		if (!document.getElementById("main_screen_stylesheet") && !pageRegister[pageIdentifier].hasOwnProperty("replacementStyleSheets")){
-		       //alert("There is no main, so adding it now");
 		       var linkTag = document.createElement ("link");
-			//alert("re-adding style.css");
-		       linkTag.href = "skin/stylesheets/style.css"; /* matt-signup - need to append version */
+		       linkTag.href = "skin/stylesheets/style.css"; /* still need to append version no. */
 		       linkTag.rel = "stylesheet";
 		       linkTag.id = "main_screen_stylesheet";
 		       var head = document.getElementsByTagName ("head")[0];
@@ -297,26 +285,22 @@ page.prototype.makePageCallsInner = function(){
 		      element = arrayWStyleSheets[i];
 			var linkTag = document.createElement ("link");
 			linkTag.href = arrayWStyleSheets[i] + "?v=" + appVersion;
-			//alert("in link: "+length+" id:"+pageIdentifier+" "+linkTag.href);
 			linkTag.rel = "stylesheet";
 			linkTag.id = "additionalStylesheet"+[i];
 			linkTag.className = "additionalStylesheet";
 
 			var head = document.getElementsByTagName ("head")[0];
 			head.appendChild (linkTag);
-		    //alert("ADDING " + linkTag.href + " index is " + linkTag.href.indexOf("signup.css"));
 
 		    }
 	    }
 
 	    if (!default_styles_removed){
 
-			//alert("dsr is " + default_styles_removed + " this should be a NOT hence the re-adding alert should not appear");
 		    if (!document.getElementById("main_screen_stylesheet")){
 
 			       var linkTag = document.createElement ("link");
-				//alert("re-adding style.css");
-			       linkTag.href = "skin/stylesheets/style.css"; /* matt-signup - need to append version */
+			       linkTag.href = "skin/stylesheets/style.css"; /* still need to append version no. */
 			       linkTag.rel = "stylesheet";
 			       linkTag.id = "main_screen_stylesheet";
 			       var head = document.getElementsByTagName ("head")[0];
@@ -346,10 +330,9 @@ page.prototype.makePageCallsInner = function(){
 	    }
 
 
-	    if (navigator.appVersion.indexOf("MSIE 7.") == -1){
-	    //Add spinner
+	    if (navigator.appVersion.indexOf("MSIE 7.") == -1){//Add spinner
 	    timeout = setTimeout(function() {
-	       $('body').append('<div class="spinner-container"><img src="skin/images/gohenry-loader.gif" /></div>');
+	       $('body').append('<div class="spinner-container"><img src="skin/images/loader.gif" /></div>');
 	    },1000);
 	    }
 
@@ -361,7 +344,7 @@ page.prototype.makePageCallsInner = function(){
 	    logMessage("AT POINT 1: pageIdentifier is " + pageIdentifier + ". Blocks are below:");
 	    logMessage(pageRegister[pageIdentifier].blocks);
 	    for(section in pageRegister[pageIdentifier].blocks) {
-		this.currentPageSections.push(section); //Gives load order for load style 2
+		this.currentPageSections.push(section); // Gives load order for load style 2
 		//checks if not already rendered
 		if($.inArray(section, this.sectionsRendered) == -1){
 		    for(block in pageRegister[pageIdentifier].blocks[section]) {
@@ -375,7 +358,7 @@ page.prototype.makePageCallsInner = function(){
 				this.currentPageAjaxCalls[calls]["data"] = new Object();
 
 				this.currentPageAjaxCalls[calls]["URL"] = globalVariableInject(blockRegister[block].AJAXcalls[calls]["URL"]);
-				this.currentPageAjaxCalls[calls]["callType"] = blockRegister[block].AJAXcalls[calls]["callType"]; // eg. use INDEX instead of GET
+				this.currentPageAjaxCalls[calls]["callType"] = blockRegister[block].AJAXcalls[calls]["callType"]; // eg. use alternate instead of GET
 				for(data in blockRegister[block].AJAXcalls[calls]["data"]) {
 				    this.currentPageAjaxCalls[calls]["data"][data]= globalVariableInject(blockRegister[block].AJAXcalls[calls]["data"][data]);
 				}
@@ -400,7 +383,6 @@ page.prototype.makePageCallsInner = function(){
 
 		var AJAXcall = $.ajax({
 		    url: apiPath + this.currentPageAjaxCalls[callID]["URL"],
-		    //async: false,
 		    data: this.currentPageAjaxCalls[callID]["data"],
 		    type: callType,
 		    dataType: 'json',
@@ -415,12 +397,8 @@ page.prototype.makePageCallsInner = function(){
 
 			if ($("#timeout_alert")){
 				$("#timeout_alert").fadeIn();
-				timeoutMessage = "A timeout has occurred on goHenry from the following url:\n\n";
+				timeoutMessage = "A timeout has occurred from the following url:\n\n";
 				timeoutMessage = timeoutMessage + __page.currentPageAjaxCalls[callID]["URL"];
-				//timeoutMessage = timeoutMessage + "\n\nData sent:";
-				//timeoutMessage = timeoutMessage + this.currentPageAjaxCalls[callID]['data'].serialize();
-				//alert(timeoutMessage);
-				//mail ("matt.platts@gohenry.co.uk","Timeout on goHenry",timeoutMessage);
 			}
 		    }
 			__page.AJAXResponseAggregator("", jqXHR.uniqueId);
@@ -570,8 +548,10 @@ page.prototype.sectionRender = function (section) {
 		if(blockRegister[block].hasOwnProperty("type") && blockRegister[block]["type"] == "external" ) {
 		    var calls;
 		    for(calls in blockRegister[block].AJAXcalls) {
-			if (!this.currentPageData[calls]){ logMessage("THERE IS NO CALLS! **************************************************************************************************************"); logMessage(this.currentPageData);}
-			//alert("NO CALLS in cpd");
+			if (!this.currentPageData[calls]){ 
+				logMessage("THERE ARE NO CALLS! ******************************************************************************************");
+				logMessage(this.currentPageData);
+			}
 			if (this.currentPageData[calls]){
 			    if(this.currentPageData[calls].hasOwnProperty("content")) {
 				logMessage("Appending content to " + section);
@@ -598,15 +578,14 @@ page.prototype.sectionRender = function (section) {
 		    position++;
 
 		    // Call associated JS if exists for block
-		    if(blockRegister[block].hasOwnProperty("javascriptURL")) {//byFulvio
+		    if(blockRegister[block].hasOwnProperty("javascriptURL")) {
 			if( typeof blockRegister[block].javascriptURL == "object"){
 
 			    for(var i=0; i< blockRegister[block].javascriptURL.length; i++){
 				attachJavaScriptFileInitial(blockRegister[block].javascriptURL[i]);
 			    }
 
-			}
-			else {
+			} else {
 
 			    attachJavaScriptFileInitial(blockRegister[block].javascriptURL);
 			}
@@ -664,7 +643,6 @@ page.prototype.sectionRender = function (section) {
 		    makePageCalls(nextPage);
 		}
 	    } else if (this.sectionsRendered.length>this.currentPageSections.length){
-		    //alert("ITS TOO BIG!");
 		    logMessage(2,"Too big");
 		    locString=pageIdentifier;
 		    logMessage(2,"Confused - redirect put in place");
