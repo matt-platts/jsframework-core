@@ -106,7 +106,7 @@ page.prototype.makePageCallsInner = function(){
 
 		    //creates new layout, checks thorugh for any section that have the same sections with the same blocks and re-adds the HTML from previous page.
 		    logMessage("Calling layoutRender for " + pageRegister[pageIdentifier].layout);
-		    layoutRender(pageRegister[pageIdentifier].layout);
+		    _page.layoutRender(pageRegister[pageIdentifier].layout);
 
 		} else {
 		    logMessage(" LAYOUTS ARE THE SAME");
@@ -197,7 +197,7 @@ page.prototype.makePageCallsInner = function(){
 		    }
 	    } else {
 		logMessage("PPI AND CPI are the same");
-		layoutRender(pageRegister[pageIdentifier].layout);
+		_page.layoutRender(pageRegister[pageIdentifier].layout);
 	    }
 
 	    //remove stylesheets for previous pages
@@ -656,7 +656,7 @@ page.prototype.sectionRender = function (section) {
  * Function: layoutRender
  *
 */
-function layoutRender(layoutIdentifier) {
+page.prototype.layoutRender = function(layoutIdentifier) {
     $(("#view-container")).hide();
     EJS.config({
         cache: cachingOnOff
